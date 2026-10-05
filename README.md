@@ -85,6 +85,6 @@ recounting with corrected coordinates has not been assessed.
 The analysis code and documentation are available under the [MIT license](LICENSE).
 You may use, modify and share the code while retaining its copyright and license
 notice. Third-party data, software and motif resources retain their applicable
-terms; see [sources and reuse](NOTICE.md).
+terms.
 
 **Natasha Machate · [KitCatasha](https://github.com/KitCatasha)**
