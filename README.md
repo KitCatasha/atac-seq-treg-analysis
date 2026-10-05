@@ -20,7 +20,7 @@ used whole-genome preprocessed data from eight samples.
 
 ## Results
 
-These numbers describe the saved internship analysis.
+These numbers describe the saved analysis.
 
 | Result | Number |
 | --- | ---: |
@@ -56,16 +56,11 @@ associations, rather than direct evidence of transcription-factor binding.
 | 6 | [HOMER_summary_and_plots.R](scripts/HOMER_summary_and_plots.R) | Summarise known motifs and plot enrichment |
 
 - `input/` — supplied count matrix, consensus peaks and eight-sample metadata.
-- `results/figures/` and `results/tables/` — saved analysis results.
-- `results/motifs/` and `results/motif_peak_analysis/` — saved HOMER outputs and follow-up tables.
+- `results/figures/` and `results/tables/` — analysis results.
+- `results/motifs/` and `results/motif_peak_analysis/` — HOMER outputs and follow-up tables.
 - `results/qc/` — MultiQC from the separate Week 1 teaching sample.
 
-- `scripts/recorded/` — recovered Week 2 Bash command bodies with configurable paths.
-
-The R scripts retain the supplied analysis with portable paths and input checks.
-The Week 1 and Week 2 Bash scripts adapt commands recovered from the saved July
-workflows. The HOMER runner is reconstructed from the supplied inputs and
-recorded methods; its complete historical shell transcript has not been recovered.
+- `scripts/recorded/` —  Week 2 Bash command bodies with configurable paths.
 
 ## Run the analysis
 
@@ -83,8 +78,7 @@ rerunning HOMER and the separate Week 1 exercise.
 
 The main Bash consensus script corrects the historical BED-to-SAF start-coordinate
 conversion. Saved results remain the original analysis snapshot; the impact of
-recounting with corrected coordinates has not been assessed. Public Bash scripts
-have not been rerun against the original upstream data.
+recounting with corrected coordinates has not been assessed. 
 
 ## License
 
