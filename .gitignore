@@ -1,0 +1,23 @@
+# Generated analysis runs and local R state
+runs/
+.Rhistory
+.RData
+.Ruserdata
+# Keep the written report out of this portfolio repository
+reports/
+# Large sequencing/reference files
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.bam
+*.bai
+*.sam
+*.bt2
+*.bt2l
+# Local files
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+.vscode/

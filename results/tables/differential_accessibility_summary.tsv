@@ -1,0 +1,6 @@
+Category	Number_of_peaks
+Consensus peaks	108176
+Peaks tested by DESeq2	50986
+Significant DARs	4156
+Treg-accessible DARs	2521
+Naive-accessible DARs	1635

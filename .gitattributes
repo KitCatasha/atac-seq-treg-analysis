@@ -1,0 +1,6 @@
+# Generated analysis files remain visible but do not count as source code.
+input/** linguist-generated=true
+results/** linguist-generated=true
+# Shell scripts use Unix line endings.
+*.sh text eol=lf
+*.R text
