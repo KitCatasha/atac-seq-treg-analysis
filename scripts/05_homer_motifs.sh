@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Public-release reconstruction from Natasha's recorded fixed-window methods.
-# This is not an original internship execution script. Install HOMER's hg38 genome.
-# Run peak_annotation_GO_and_HOMER_input.R first with the same ATAC_RUN_DIR.
 set -euo pipefail
 [[ $# -eq 0 ]] || { printf '%s\n' 'Usage: bash scripts/05_homer_motifs.sh' >&2; exit 1; }
 source "$(dirname -- "${BASH_SOURCE[0]}")/project_paths.sh"
@@ -10,7 +7,6 @@ threads=${HOMER_THREADS:-2}
 [[ "$threads" =~ ^[1-9][0-9]*$ ]] || die 'HOMER_THREADS must be a positive integer.'
 sets=(treg naive treg_promoter naive_promoter treg_nonpromoter naive_nonpromoter)
 backgrounds=(background background background_promoter background_promoter background_nonpromoter background_nonpromoter)
-# Validate all six analyses before starting; preserve previous results.
 for i in "${!sets[@]}"; do
     target="$run_dir/homer_input/${sets[$i]}_DARs.bed"
     background="$run_dir/homer_input/${backgrounds[$i]}_peaks.bed"

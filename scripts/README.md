@@ -1,17 +1,10 @@
 # Running the analysis
 
-These scripts support the Treg/naive CD4+ T-cell case study in the main README.
-They are open source and can be adapted to other experiments by updating
-sample metadata, input matching, count filters and statistical contrasts.
-The supplied runners expect this project's eight-sample paired design.
-
-Browsing or publishing the repository does not require running the analysis.
-Use the main scripts below for a new run; `recorded/` retains the earlier
-Week 2 command bodies for comparison with the saved results.
+Run these scripts from the repository root. They use the eight-sample,
+paired-donor design listed in `input/samples.tsv`.
 
 ## R analysis from the supplied inputs
 
-Run commands from the repository root, the folder containing the main README.
 Use R with the packages loaded by the scripts:
 SummarizedExperiment, DESeq2, apeglm, vsn, ggplot2, pheatmap, GenomicRanges,
 GenomicFeatures, ChIPseeker, TxDb.Hsapiens.UCSC.hg38.knownGene, org.Hs.eg.db,
@@ -27,15 +20,12 @@ Rscript scripts/peak_annotation_GO_and_HOMER_input.R
 Rscript scripts/HOMER_summary_and_plots.R
 ```
 
-The first two commands use the supplied count matrix, consensus BED and
-metadata in `input/`. The last command summarises saved HOMER outputs; it does
-not run HOMER. Newly generated tables and plots go under `runs/local/`.
-The R scripts may replace outputs within that selected run directory.
-Saved files in `input/` and `results/` remain separate.
+The first two commands use `input/`. The last summarises HOMER outputs.
+New tables and plots go under `runs/local/`; R scripts can replace files there.
 
 For a different output folder, set `ATAC_RUN_DIR` to a subfolder of `runs/`.
 `ATAC_INPUT_DIR` optionally selects a different input folder for R.
-Both settings apply to the current terminal session. To return to defaults:
+To return to defaults:
 
 ```bash
 unset ATAC_RUN_DIR ATAC_INPUT_DIR
@@ -72,37 +62,32 @@ those stages. `runs/` is ignored by Git.
 The motif runner uses fixed 200-bp windows, separately testing Treg and naive
 DARs against non-differential accessible peaks. Promoter and non-promoter
 analyses use the corresponding region-matched backgrounds.
-`HOMER_THREADS` optionally changes the public runner's two-thread default.
+`HOMER_THREADS` sets the thread count; the default is two.
 
-Genome, annotation, motif-database and software versions can affect new results.
-The public Bash runners have been checked for syntax and wrapper behaviour
-but have not been scientifically rerun against the original upstream data.
+Software, genome, annotation and motif-database versions can affect new results.
+The Bash scripts use configurable paths and input checks. The HOMER runner
+was reconstructed from the analysis methods; the original shell script was
+not available. These Bash scripts have not been rerun on the upstream data.
 
-## Coordinate correction and historical commands
+## Coordinates and saved results
 
-The recovered Week 2 script and the course example pass BED starts unchanged
-into SAF. The original featureCounts table records these same start positions.
-The main public script adds one to each zero-based BED start for one-based,
-inclusive SAF coordinates, while keeping the end unchanged.
+BED uses zero-based starts; SAF uses one-based, inclusive coordinates.
+`01_consensus_peaks.sh` adds one to each BED start and keeps the end unchanged.
 See the [bedtools coordinate description](https://bedtools.readthedocs.io/en/latest/content/general-usage.html)
 and [Subread user's guide, section 6.2.2](https://subread.sourceforge.net/SubreadUsersGuide.pdf).
 
-For example, BED `chr1 100 200` becomes SAF start `101`, end `200` for the same
-100-base interval. Retaining start `100` in SAF adds one base to its left edge.
-Saved counts and results are the original analysis snapshot. Corrected counts
-may differ, and their effect on downstream DARs has not been measured.
+For example, BED `chr1 100 200` becomes SAF start `101`, end `200`.
+The saved counts used unchanged BED starts. Recounting with corrected
+coordinates may change counts and DARs; this effect has not been measured.
 
-`recorded/01_consensus_peaks.sh` and `recorded/02_count_fragments.sh` retain
-the July Week 2 processing command bodies, including the historical SAF
-conversion and sample order. Only the institutional base path is replaced by
-`ATAC_RECORDED_BASE`, and existing-output checks are added. These files are
-historical reference code, rather than the recommended corrected entry points.
+`recorded/` keeps the Week 2 commands for comparison, including the original
+SAF conversion and sample order. Set `ATAC_RECORDED_BASE` to their data folder.
+Use the main scripts above when rebuilding counts.
 
 ## BATF/LEF1 gene follow-up
 
-The supplied motif-hit tables identify BATF-positive Treg peaks and LEF1-positive
-naive peaks and their nearest genes. They belong to the saved analysis.
-The motif runner performs enrichment but does not recreate these motif scans.
+The saved motif-hit tables identify BATF-positive Treg peaks and LEF1-positive
+naive peaks and their nearest genes. Motif enrichment does not recreate these scans.
 
 With rebuilt inputs, the final R script makes enrichment plots and skips
 this additional gene follow-up unless newly scanned tables are present as:
@@ -117,9 +102,8 @@ Nearest-gene associations do not establish direct regulatory targets.
 
 ## Separate Week 1 chromosome-22 teaching exercise
 
-The preprocessing script adapts the commands in the saved workflow of
-26 July 2026. It includes FastQC, Cutadapt, Bowtie2, SAMtools, Picard, MACS2
-and MultiQC. It uses teaching sample SRR7650763 and is independent of the
+The Week 1 script runs FastQC, Cutadapt, Bowtie2, SAMtools, Picard, MACS2
+and MultiQC on teaching sample SRR7650763. It is separate from the
 eight-sample whole-genome comparison.
 
 Activate an environment containing those tools, then supply the two original
@@ -135,8 +119,5 @@ bash scripts/00_week1_chr22_training.sh \
 
 Outputs go under `runs/teaching/week1_chr22/`. Without `ATAC_RUN_DIR`, the
 default is `runs/week1/week1_chr22/`. Existing teaching outputs are protected.
-The public version changes file routing and uses the saved standard MultiQC
-command without an unavailable institution-specific configuration.
-Blacklist exclusion was not present in the recovered command document and
-is not reconstructed in this script. This is a preserved teaching workflow,
-not a complete historical execution log or a whole-genome preprocessing recipe.
+This teaching script does not include blacklist filtering or whole-genome
+preprocessing.

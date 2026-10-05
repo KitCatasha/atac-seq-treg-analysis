@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Shared paths for the public-release Bash scripts. Requires Bash 4+.
 
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 repo_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)

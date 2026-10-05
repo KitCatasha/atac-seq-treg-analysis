@@ -1,12 +1,4 @@
 #!/usr/bin/env bash
-# SPDX-License-Identifier: MIT
-# Adapted from the saved Week 1 workflow of 26 July 2026.
-# Processing commands below retain the recorded parameters; paths and guards
-# are adapted for this public repository. This is a chr22 teaching exercise,
-# separate from the eight-sample whole-genome comparison.
-# Blacklist exclusion is absent from the recovered Week 1 command document.
-# It is not reconstructed here; this script is not the complete execution log.
-# Usage: bash scripts/00_week1_chr22_training.sh R1.fastq.gz R2.fastq.gz BT2_CHR22_PREFIX
 set -euo pipefail
 [[ $# -eq 3 ]] || {
     printf '%s\n' 'Usage: bash scripts/00_week1_chr22_training.sh R1.fastq.gz R2.fastq.gz BT2_CHR22_PREFIX' >&2
@@ -45,13 +37,11 @@ mkdir -p "$QC/fastqc_raw" "$QC/fastqc_trimmed"
 mkdir -p "$MULTIQC_INPUTS" "$MULTIQC_OUTPUT"
 gzip -t "$R1" "$R2"
 
-# Recorded Week 1 workflow, section 5.
 fastqc \
   -t 2 \
   -o "$QC/fastqc_raw" \
   "$R1" "$R2"
 
-# Recorded Week 1 workflow, section 6.
 cutadapt \
   -j 2 \
   -a CTGTCTCTTATACACATCT \
@@ -63,13 +53,11 @@ cutadapt \
   "$R1" "$R2" \
   > "$TRIMMED/${SAMPLE}.cutadapt.log" 2>&1
 
-# Recorded Week 1 workflow, section 7.
 fastqc \
   -t 2 \
   -o "$QC/fastqc_trimmed" \
   "$TRIM_R1" "$TRIM_R2"
 
-# Recorded Week 1 workflow, section 8.
 { time bowtie2 \
   -p 2 \
   -X 2000 \
@@ -79,7 +67,6 @@ fastqc \
   -S "$SAM"; } \
   2> "$ALIGN/bowtie2.log"
 
-# Recorded Week 1 workflow, section 9.
 samtools view \
   -@ 2 \
   -b \
@@ -89,13 +76,11 @@ samtools view \
   -o "$FILTERED/${SAMPLE}.filtered.bam" \
   "$SAM"
 
-# Recorded Week 1 workflow, section 10.
 samtools sort \
   -@ 2 \
   -o "$FILTERED/${SAMPLE}.filtered.sorted.bam" \
   "$FILTERED/${SAMPLE}.filtered.bam"
 
-# Recorded Week 1 workflow, section 11.
 picard AddOrReplaceReadGroups \
   I="$FILTERED/${SAMPLE}.filtered.sorted.bam" \
   O="$FILTERED/${SAMPLE}.filtered.sorted.rg.bam" \
@@ -107,7 +92,6 @@ picard AddOrReplaceReadGroups \
   SORT_ORDER=coordinate \
   VALIDATION_STRINGENCY=SILENT
 
-# Recorded Week 1 workflow, section 12.
 picard MarkDuplicates \
   I="$FILTERED/${SAMPLE}.filtered.sorted.rg.bam" \
   O="$DEDUP_BAM" \
@@ -115,27 +99,22 @@ picard MarkDuplicates \
   REMOVE_DUPLICATES=true \
   VALIDATION_STRINGENCY=SILENT
 
-# Recorded Week 1 workflow, section 13.
 samtools index -@ 2 "$DEDUP_BAM"
 
-# Recorded Week 1 workflow, section 14.
 samtools flagstat \
   -@ 2 \
   "$DEDUP_BAM" \
   > "$QC/${SAMPLE}.final.flagstat.txt"
 
-# Recorded Week 1 workflow, section 14.
 samtools stats \
   -@ 2 \
   "$DEDUP_BAM" \
   > "$QC/${SAMPLE}.final.samtools_stats.txt"
 
-# Recorded Week 1 workflow, section 14.
 samtools idxstats \
   "$DEDUP_BAM" \
   > "$QC/${SAMPLE}.final.idxstats.txt"
 
-# Recorded Week 1 workflow, section 14.
 picard CollectInsertSizeMetrics \
   I="$DEDUP_BAM" \
   O="$QC/${SAMPLE}.insert_size_metrics.txt" \
@@ -143,7 +122,6 @@ picard CollectInsertSizeMetrics \
   M=0.5 \
   VALIDATION_STRINGENCY=SILENT
 
-# Recorded Week 1 workflow, section 15.
 macs2 callpeak \
   -t "$DEDUP_BAM" \
   -f BAMPE \
@@ -156,7 +134,6 @@ macs2 callpeak \
   --call-summits \
   > "$PEAKS/macs2.log" 2>&1
 
-# Recorded Week 1 workflow, section 16.
 mkdir -p "$MULTIQC_INPUTS/fastqc"
 mkdir -p "$MULTIQC_INPUTS/cutadapt"
 mkdir -p "$MULTIQC_INPUTS/bowtie2"
@@ -164,7 +141,6 @@ mkdir -p "$MULTIQC_INPUTS/picard"
 mkdir -p "$MULTIQC_INPUTS/samtools"
 mkdir -p "$MULTIQC_INPUTS/macs2"
 
-# Recorded Week 1 workflow, section 16.
 cp "$QC/fastqc_raw/"* "$MULTIQC_INPUTS/fastqc/"
 cp "$QC/fastqc_trimmed/"* "$MULTIQC_INPUTS/fastqc/"
 cp "$TRIMMED/${SAMPLE}.cutadapt.log" "$MULTIQC_INPUTS/cutadapt/"
@@ -177,13 +153,11 @@ cp "$QC/${SAMPLE}.final.idxstats.txt" "$MULTIQC_INPUTS/samtools/"
 cp "$PEAKS/macs2.log" "$MULTIQC_INPUTS/macs2/"
 cp "$PEAKS/${SAMPLE}_ATAC_chr22_peaks.narrowPeak" "$MULTIQC_INPUTS/macs2/"
 
-# Recorded Week 1 workflow, section 16.
 printf "Sample\tPeaks\n%s\t%s\n" \
   "${SAMPLE}.final" \
   "$(wc -l < "$PEAKS/${SAMPLE}_ATAC_chr22_peaks.narrowPeak")" \
   > "$MULTIQC_INPUTS/macs2/macs2_peaks_mqc.tsv"
 
-# Recorded Week 1 workflow, section 17.
 multiqc \
   "$PROJECT/multiqc_inputs" \
   -o "$PROJECT/multiqc_output" \

@@ -5,9 +5,6 @@ I analysed public bulk ATAC-seq data from [Calderon et al. (2019)](https://doi.o
 to compare chromatin accessibility between regulatory T cells and naive
 conventional CD4+ T cells from four paired human donors.
 
-This repository shares the analysis code and results for portfolio use and
-open-source reuse.
-
 ## Tools and workflow
 
 - **Bash:** FastQC, Cutadapt, Bowtie2, SAMtools, Picard, MACS2, bedtools, featureCounts and HOMER.
@@ -19,8 +16,6 @@ Week 1 used a separate chromosome-22 teaching sample. The main comparison
 used whole-genome preprocessed data from eight samples.
 
 ## Results
-
-These numbers describe the saved analysis.
 
 | Result | Number |
 | --- | ---: |
@@ -59,8 +54,7 @@ associations, rather than direct evidence of transcription-factor binding.
 - `results/figures/` and `results/tables/` — analysis results.
 - `results/motifs/` and `results/motif_peak_analysis/` — HOMER outputs and follow-up tables.
 - `results/qc/` — MultiQC from the separate Week 1 teaching sample.
-
-- `scripts/recorded/` —  Week 2 Bash command bodies with configurable paths.
+- `scripts/recorded/` — Week 2 Bash commands used for the saved counts.
 
 ## Run the analysis
 
@@ -76,15 +70,40 @@ New outputs go to `runs/local/`. The last script summarises existing HOMER resul
 See [script instructions](scripts/README.md) for dependencies, rebuilding counts,
 rerunning HOMER and the separate Week 1 exercise.
 
-The main Bash consensus script corrects the historical BED-to-SAF start-coordinate
-conversion. Saved results remain the original analysis snapshot; the impact of
-recounting with corrected coordinates has not been assessed. 
+The consensus script converts BED starts to one-based SAF coordinates.
+The saved results use the original count matrix; rebuilding with corrected
+coordinates may change counts and differential accessibility results.
 
 ## License
 
-The analysis code and documentation are available under the [MIT license](LICENSE).
-You may use, modify and share the code while retaining its copyright and license
-notice. Third-party data, software and motif resources retain their applicable
-terms.
+The original analysis code and documentation are licensed under MIT.
+Third-party data, software and motif resources retain their applicable terms.
+
+<details>
+<summary>MIT license text</summary>
+
+MIT License
+
+Copyright (c) 2026 Natasha Machate
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+</details>
 
 **Natasha Machate · [KitCatasha](https://github.com/KitCatasha)**

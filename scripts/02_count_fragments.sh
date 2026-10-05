@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# Public-release adaptation of the saved July 2026 Week 2 counting workflow,
-# cross-checked with the SysBio Internship Schedule (SS2026, Week 2, pp. 5-6).
-# The recovered historical command body is in recorded/02_count_fragments.sh.
-# Usage: bash scripts/02_count_fragments.sh /path/to/cleaned_BAM_directory
 set -euo pipefail
 [[ $# -eq 1 ]] || { printf '%s\n' 'Usage: bash scripts/02_count_fragments.sh BAM_DIR' >&2; exit 1; }
 bam_dir=$(realpath -e -- "$1")
@@ -17,20 +13,16 @@ bams=()
 for sample in "${samples[@]}"; do
     files=("$bam_dir/$sample"*.bam)
     [[ ${#files[@]} -eq 1 && -s "${files[0]}" ]] || die "Need exactly one nonempty cleaned $sample*.bam file."
-    # As in the course example, accept either standard BAM-index filename.
     [[ -s "${files[0]}.bai" || -s "${files[0]%.bam}.bai" ]] \
         || die "BAM index missing for $sample; run samtools index first."
     bams+=("${files[0]}")
     printf '%s\t%s\n' "$sample" "${files[0]}" >> "$stage/bam_order.tsv"
 done
-# Paired fragments, both ends mapped, chimeric pairs excluded, two threads.
-# -B requires both ends to be mapped; it does not require both to overlap a peak.
 featureCounts -F SAF -p --countReadPairs -B -C -T 2 \
     -a "$run_dir/input/consensus_peaks.saf" \
     -o "$stage/counts_matrix.txt" "${bams[@]}" \
     > "$stage/featureCounts.log" 2>&1
 [[ -s "$stage/counts_matrix.txt.summary" ]] || die 'featureCounts assignment summary is missing.'
-# Label columns in the same order as the actual BAM arguments, not saved matrix order.
 awk -F '\t' 'BEGIN {OFS="\t"}
     FNR==NR {ids[++n]=$1; paths[n]=$2; next}
     /^#/ {next}

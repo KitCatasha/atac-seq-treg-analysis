@@ -1,4 +1,3 @@
-# Run the analysis scripts from the repository root.
 if (!file.exists("input/samples.tsv")) {
   stop("Run Rscript from the repository root (the folder containing README.md).")
 }

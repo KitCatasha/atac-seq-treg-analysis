@@ -1,4 +1,3 @@
-# Public-release file routing; analytical operations retained from the supplied script.
 source("scripts/project_paths.R")
 
 library(ggplot2)
@@ -205,8 +204,6 @@ ggsave(
   bg = "white"
 )
 
-# The supplied BATF/LEF1 motif-hit tables describe the saved analysis only.
-# Rebuilt inputs require new motif scans before this optional gene follow-up.
 if (!use_saved_input && !all(file.exists(file.path(run_dir, "motif_peak_analysis", c(
   "treg_BATF_motif_nearby_genes.txt", "naive_LEF1_motif_nearby_genes.txt"
 ))))) {

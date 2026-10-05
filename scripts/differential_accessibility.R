@@ -1,4 +1,3 @@
-# Public-release file routing; analytical operations retained from the supplied script.
 source("scripts/project_paths.R")
 
 library(SummarizedExperiment)
